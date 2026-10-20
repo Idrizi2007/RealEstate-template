@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="RealEstate.DataAccess/RealEstate.DataAccess.csproj" />
+  <Project Path="RealEstate.Models/RealEstate.Models.csproj" />
+  <Project Path="RealEstate.Utility/RealEstate.Utility.csproj" />
+  <Project Path="RealEstate.Web/RealEstate.Web.csproj" />
+</Solution>
