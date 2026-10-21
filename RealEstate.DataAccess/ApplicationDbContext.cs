@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RealEstate.Models;
 
 namespace RealEstate.DataAccess
 {
@@ -10,5 +11,7 @@ namespace RealEstate.DataAccess
         {
 
         }
+
+        public DbSet<City> Cities { get; set; }
     }
 }

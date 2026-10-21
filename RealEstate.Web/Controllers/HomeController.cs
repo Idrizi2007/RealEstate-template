@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using RealEstate.Web.Models;
+using RealEstate.Models;
 
 namespace RealEstate.Web.Controllers;
 
