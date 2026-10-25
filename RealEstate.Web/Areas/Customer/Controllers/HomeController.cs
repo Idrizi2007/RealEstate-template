@@ -1,9 +1,10 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using RealEstate.Models;
+using System.Diagnostics;
 
 namespace RealEstate.Web.Controllers;
 
+[Area("Customer")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
