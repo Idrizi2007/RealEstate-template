@@ -37,7 +37,8 @@ namespace RealEstate.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (city.Id == 0)
+                bool isNew = city.Id == 0;
+                if (isNew)
                 {
                     _unitOfWork.City.Add(city);
                 }
@@ -46,6 +47,7 @@ namespace RealEstate.Web.Areas.Admin.Controllers
                     _unitOfWork.City.Update(city);
                 }
                 _unitOfWork.Save();
+                TempData["success"] = isNew ? "Qyteti u shtua me sukses" : "Qyteti u perditesua me sukses";
                 return RedirectToAction(nameof(Index));
             }
             return View(city);
