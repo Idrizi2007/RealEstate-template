@@ -14,5 +14,6 @@ namespace RealEstate.DataAccess
 
         public DbSet<City> Cities { get; set; }
         public DbSet<PropertyType> PropertyTypes { get; set; }
+        public DbSet<Amenity> Amenities { get; set; }
     }
 }

@@ -4,6 +4,7 @@
     {
         ICityRepository City { get; }
         IPropertyTypeRepository PropertyTypes { get; }
+        IAmenityRepository Amenities { get; }
         void Save();
     }
 }
