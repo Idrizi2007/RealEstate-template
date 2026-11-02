@@ -3,7 +3,7 @@
     public interface IUnitOfWork
     {
         ICityRepository City { get; }
-
+        IPropertyTypeRepository PropertyTypes { get; }
         void Save();
     }
 }

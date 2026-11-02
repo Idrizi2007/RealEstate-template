@@ -7,10 +7,13 @@ namespace RealEstate.DataAccess.Repository
     {
         private readonly ApplicationDbContext _db;
         public ICityRepository City { get; private set; }
+        public IPropertyTypeRepository PropertyTypes { get; private set; }
+
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
             City = new CityRepository(_db);
+            PropertyTypes = new PropertyTypeRepository(_db);
         }
 
         public void Save()
