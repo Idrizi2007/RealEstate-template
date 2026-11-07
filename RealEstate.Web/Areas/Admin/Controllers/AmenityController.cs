@@ -72,16 +72,16 @@ namespace RealEstate.Web.Areas.Admin.Controllers
         {
             if (id == null || id == 0)
             {
-                return BadRequest(new { message = "Invalid ID" });
+                return BadRequest(new { message = "Id i pavlefshëm" });
             }
             Amenity? amenityFromDb = _unitOfWork.Amenities.Get(u => u.Id == id);
             if (amenityFromDb == null)
             {
-                return NotFound(new { message = "Amenity not found" });
+                return NotFound(new { message = "Pajisja nuk u gjet" });
             }
             _unitOfWork.Amenities.Remove(amenityFromDb);
             _unitOfWork.Save();
-            return Json(new { message = "Amenity deleted successfully" });
+            return Json(new { message = "Pajisja u fshi me sukses" });
         }
         #endregion
     }

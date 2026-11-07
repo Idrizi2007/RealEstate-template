@@ -66,16 +66,16 @@ namespace RealEstate.Web.Areas.Admin.Controllers
         {
             if (id == null || id == 0)
             {
-                return BadRequest(new { message = "Invalid ID" });
+                return BadRequest(new { message = "Id i pavlefshëm" });
             }
             PropertyType? propertyTypeFromDb = _unitOfWork.PropertyTypes.Get(u => u.Id == id);
             if (propertyTypeFromDb == null)
             {
-                return NotFound(new { message = "Property type not found" });
+                return NotFound(new { message = "Lloji i pronës nuk u gjet" });
             }
             _unitOfWork.PropertyTypes.Remove(propertyTypeFromDb);
             _unitOfWork.Save();
-            return Json(new { message = "Property type deleted successfully" });
+            return Json(new { message = "Lloji i pronës u fshi me sukses" });
         }
         #endregion
     }

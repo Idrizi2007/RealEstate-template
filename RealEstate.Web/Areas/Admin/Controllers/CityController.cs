@@ -66,17 +66,17 @@ namespace RealEstate.Web.Areas.Admin.Controllers
         {
             if (id == null || id == 0)
             {
-                return BadRequest(new { message = "Invalid ID" });
+                return BadRequest(new { message = "Id i pavlefshëm" });
             }
             City? cityFromDb = _unitOfWork.City.Get(u => u.Id == id);
             if (cityFromDb == null)
             {
-                return NotFound(new { message = "City not found" });
+                return NotFound(new { message = "Qyteti nuk u gjet" });
             }
 
             _unitOfWork.City.Remove(cityFromDb);
             _unitOfWork.Save();
-            return Ok(new { message = "City deleted successfully" });
+            return Ok(new { message = "Qyteti u fshi me sukses" });
         }
 
         #endregion
