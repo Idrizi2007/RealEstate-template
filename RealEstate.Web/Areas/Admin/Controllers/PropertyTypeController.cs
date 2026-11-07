@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using RealEstate.DataAccess.Repository.IRepository;
 using RealEstate.Models;
 
@@ -17,14 +17,14 @@ namespace RealEstate.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public IActionResult Upsert(int? id)
+        public async Task<IActionResult> Upsert(int? id)
         {
             if (id == null || id == 0)
             {
                 return View(new PropertyType());
             }
 
-            PropertyType? propertyTypeFromDb = _unitOfWork.PropertyTypes.Get(u => u.Id == id);
+            PropertyType? propertyTypeFromDb = await _unitOfWork.PropertyTypes.GetAsync(u => u.Id == id);
             if (propertyTypeFromDb == null)
             {
                 return NotFound();
@@ -32,7 +32,7 @@ namespace RealEstate.Web.Areas.Admin.Controllers
             return View(propertyTypeFromDb);
         }
         [HttpPost]
-        public IActionResult Upsert(PropertyType propertyType)
+        public async Task<IActionResult> Upsert(PropertyType propertyType)
         {
             if (ModelState.IsValid)
             {
@@ -45,7 +45,7 @@ namespace RealEstate.Web.Areas.Admin.Controllers
                 {
                     _unitOfWork.PropertyTypes.Update(propertyType);
                 }
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
                 TempData["success"] = isNew ? "Lloji i pronës u shtua me sukses" : "Lloji i pronës u përditësua me sukses";
                 return RedirectToAction(nameof(Index));
             }
@@ -55,26 +55,26 @@ namespace RealEstate.Web.Areas.Admin.Controllers
         #region Api Calls
         
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var propertyTypeFromDb = _unitOfWork.PropertyTypes.GetAll().OrderBy(o => o.Name);
+            var propertyTypeFromDb = (await _unitOfWork.PropertyTypes.GetAllAsync()).OrderBy(o => o.Name);
             return Json(new { data = propertyTypeFromDb });
         }
         
         [HttpDelete]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || id == 0)
             {
                 return BadRequest(new { message = "Id i pavlefshëm" });
             }
-            PropertyType? propertyTypeFromDb = _unitOfWork.PropertyTypes.Get(u => u.Id == id);
+            PropertyType? propertyTypeFromDb = await _unitOfWork.PropertyTypes.GetAsync(u => u.Id == id);
             if (propertyTypeFromDb == null)
             {
                 return NotFound(new { message = "Lloji i pronës nuk u gjet" });
             }
             _unitOfWork.PropertyTypes.Remove(propertyTypeFromDb);
-            _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
             return Json(new { message = "Lloji i pronës u fshi me sukses" });
         }
         #endregion

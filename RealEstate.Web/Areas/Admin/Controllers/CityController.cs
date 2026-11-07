@@ -17,14 +17,14 @@ namespace RealEstate.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public IActionResult Upsert(int? id)
+        public async Task<IActionResult> Upsert(int? id)
         {
             if (id == null || id == 0)
             {
                 return View(new City());
             }
 
-            City? cityFromDb = _unitOfWork.City.Get(u => u.Id == id);
+            City? cityFromDb = await _unitOfWork.City.GetAsync(u => u.Id == id);
             if (cityFromDb == null)
             {
                 return NotFound();
@@ -33,7 +33,7 @@ namespace RealEstate.Web.Areas.Admin.Controllers
 
         }
         [HttpPost]
-        public IActionResult Upsert(City city)
+        public async Task<IActionResult> Upsert(City city)
         {
             if (ModelState.IsValid)
             {
@@ -46,7 +46,7 @@ namespace RealEstate.Web.Areas.Admin.Controllers
                 {
                     _unitOfWork.City.Update(city);
                 }
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
                 TempData["success"] = isNew ? "Qyteti u shtua me sukses" : "Qyteti u perditesua me sukses";
                 return RedirectToAction(nameof(Index));
             }
@@ -55,27 +55,27 @@ namespace RealEstate.Web.Areas.Admin.Controllers
         #region Api Calls
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var cityList = _unitOfWork.City.GetAll();
+            var cityList = await _unitOfWork.City.GetAllAsync();
             return Json(new { data = cityList });
         }
 
         [HttpDelete]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || id == 0)
             {
                 return BadRequest(new { message = "Id i pavlefshëm" });
             }
-            City? cityFromDb = _unitOfWork.City.Get(u => u.Id == id);
+            City? cityFromDb = await _unitOfWork.City.GetAsync(u => u.Id == id);
             if (cityFromDb == null)
             {
                 return NotFound(new { message = "Qyteti nuk u gjet" });
             }
 
             _unitOfWork.City.Remove(cityFromDb);
-            _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
             return Ok(new { message = "Qyteti u fshi me sukses" });
         }
 

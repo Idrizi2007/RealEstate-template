@@ -20,9 +20,9 @@ namespace RealEstate.DataAccess.Repository
             Neighbourhood = new NeighbourhoodRepository(_db);
         }
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
     }
 }

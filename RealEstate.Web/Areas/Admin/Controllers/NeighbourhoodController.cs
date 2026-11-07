@@ -18,12 +18,12 @@ namespace RealEstate.Web.Areas.Admin.Controllers
         {
             return View();
         }
-        public IActionResult Upsert(int? id)
+        public async Task<IActionResult> Upsert(int? id)
         {
             var neighberhoodFromDb = new NeighbourhoodVM()
             {
                 Neighbourhood = new Neighbourhood(),
-                Cities = _unitOfWork.City.GetAll(u => u.IsActive == true).Select(i => new SelectListItem
+                Cities = (await _unitOfWork.City.GetAllAsync(u => u.IsActive == true)).Select(i => new SelectListItem
                 {
                     Text = i.Name,
                     Value = i.Id.ToString()
@@ -35,7 +35,7 @@ namespace RealEstate.Web.Areas.Admin.Controllers
             {
                 return View(neighberhoodFromDb);
             }
-            neighberhoodFromDb.Neighbourhood = _unitOfWork.Neighbourhood.Get(u => u.Id == id);
+            neighberhoodFromDb.Neighbourhood = await _unitOfWork.Neighbourhood.GetAsync(u => u.Id == id);
             if(neighberhoodFromDb.Neighbourhood == null)
             {
                 return NotFound();
@@ -43,7 +43,7 @@ namespace RealEstate.Web.Areas.Admin.Controllers
             return View(neighberhoodFromDb);
         }
         [HttpPost]
-        public IActionResult Upsert(NeighbourhoodVM neighbourhoodVM)
+        public async Task<IActionResult> Upsert(NeighbourhoodVM neighbourhoodVM)
         {
             if (ModelState.IsValid)
             {
@@ -56,11 +56,11 @@ namespace RealEstate.Web.Areas.Admin.Controllers
                 {
                     _unitOfWork.Neighbourhood.Update(neighbourhoodVM.Neighbourhood);
                 }
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
                 TempData["success"] = isNew ? "Lagjja u shtua me sukses" : "Lagjja u përditësua me sukses";
                 return RedirectToAction(nameof(Index));
             }
-            neighbourhoodVM.Cities = _unitOfWork.City.GetAll(u => u.IsActive).Select(i => new SelectListItem
+            neighbourhoodVM.Cities = (await _unitOfWork.City.GetAllAsync(u => u.IsActive)).Select(i => new SelectListItem
             {
                 Text = i.Name,
                 Value = i.Id.ToString()
@@ -71,25 +71,25 @@ namespace RealEstate.Web.Areas.Admin.Controllers
         #region API CALLS
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var neighbourhoodList = _unitOfWork.Neighbourhood.GetAll(includeProperties: "City");
+            var neighbourhoodList = await _unitOfWork.Neighbourhood.GetAllAsync(includeProperties: "City");
             return Json(new { data = neighbourhoodList });
         }
         [HttpDelete]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == 0)
             {
                 return BadRequest(new { message = "Id i pavlefshëm" });
             }
-            var neighbourhood = _unitOfWork.Neighbourhood.Get(u => u.Id == id);
+            var neighbourhood = await _unitOfWork.Neighbourhood.GetAsync(u => u.Id == id);
             if (neighbourhood == null)
             {
                 return NotFound(new { message = "Lagjja nuk u gjet" });
             }
             _unitOfWork.Neighbourhood.Remove(neighbourhood);
-            _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
             return Ok(new { message = "Lagjja u fshi me sukses" });
         }
         #endregion

@@ -19,7 +19,7 @@ namespace RealEstate.DataAccess.Repository
             _dbSet.Add(entity);
         }
 
-        public T? Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
+        public async Task<T?> GetAsync(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
         {
             var query = _dbSet.AsQueryable();
             if (!tracked)
@@ -33,11 +33,11 @@ namespace RealEstate.DataAccess.Repository
                 query = query.Include(includeProperty);
             }
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
 
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
         {
             var query = _dbSet.AsQueryable();
 
@@ -48,7 +48,7 @@ namespace RealEstate.DataAccess.Repository
                 query = query.Include(includeProperty);
             }
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
         public void Remove(T entity)

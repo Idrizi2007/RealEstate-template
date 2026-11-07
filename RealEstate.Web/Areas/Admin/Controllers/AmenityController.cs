@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using RealEstate.DataAccess.Repository.IRepository;
 using RealEstate.Models;
 using RealEstate.Utility;
@@ -18,14 +18,14 @@ namespace RealEstate.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public IActionResult Upsert(int? id)
+        public async Task<IActionResult> Upsert(int? id)
         {
             if (id == null || id == 0)
             {
                 return View(new Amenity());
             }
 
-            Amenity? amenityFromDb = _unitOfWork.Amenities.Get(u => u.Id == id);
+            Amenity? amenityFromDb = await _unitOfWork.Amenities.GetAsync(u => u.Id == id);
             if (amenityFromDb == null)
             {
                 return NotFound();
@@ -33,7 +33,7 @@ namespace RealEstate.Web.Areas.Admin.Controllers
             return View(amenityFromDb);
         }
         [HttpPost]
-        public IActionResult Upsert(Amenity amenity)
+        public async Task<IActionResult> Upsert(Amenity amenity)
         {
             if (!string.IsNullOrEmpty(amenity.IconClass) && !AmenityIcons.All.Contains(amenity.IconClass))
             {
@@ -51,7 +51,7 @@ namespace RealEstate.Web.Areas.Admin.Controllers
                 {
                     _unitOfWork.Amenities.Update(amenity);
                 }
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
                 TempData["success"] = isNew ? "Pajisja u shtua me sukses" : "Pajisja u përditësua me sukses";
                 return RedirectToAction(nameof(Index));
             }
@@ -61,26 +61,26 @@ namespace RealEstate.Web.Areas.Admin.Controllers
         #region Api Calls
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var amenitiesFromDb = _unitOfWork.Amenities.GetAll().OrderBy(o => o.Name);
+            var amenitiesFromDb = (await _unitOfWork.Amenities.GetAllAsync()).OrderBy(o => o.Name);
             return Json(new { data = amenitiesFromDb });
         }
 
         [HttpDelete]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || id == 0)
             {
                 return BadRequest(new { message = "Id i pavlefshëm" });
             }
-            Amenity? amenityFromDb = _unitOfWork.Amenities.Get(u => u.Id == id);
+            Amenity? amenityFromDb = await _unitOfWork.Amenities.GetAsync(u => u.Id == id);
             if (amenityFromDb == null)
             {
                 return NotFound(new { message = "Pajisja nuk u gjet" });
             }
             _unitOfWork.Amenities.Remove(amenityFromDb);
-            _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
             return Json(new { message = "Pajisja u fshi me sukses" });
         }
         #endregion
