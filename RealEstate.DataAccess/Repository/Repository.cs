@@ -19,7 +19,7 @@ namespace RealEstate.DataAccess.Repository
             _dbSet.Add(entity);
         }
 
-        public async Task<T?> GetAsync(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
+        public async Task<T?> GetAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null, bool tracked = false)
         {
             var query = _dbSet.AsQueryable();
             if (!tracked)

@@ -16,6 +16,7 @@ namespace RealEstate.DataAccess
         public DbSet<PropertyType> PropertyTypes { get; set; }
         public DbSet<Amenity> Amenities { get; set; }
         public DbSet<Neighbourhood> Neighbourhoods { get; set; }
+        public DbSet<ContactInfo> ContactInfos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelbuilder)
         {

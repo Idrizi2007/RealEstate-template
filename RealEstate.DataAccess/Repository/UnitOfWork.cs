@@ -10,6 +10,7 @@ namespace RealEstate.DataAccess.Repository
         public IPropertyTypeRepository PropertyTypes { get; private set; }
         public IAmenityRepository Amenities { get; private set; }
         public INeighbourhoodRepository Neighbourhood { get; private set; }
+        public IContactInfoRepository ContactInfo { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -18,6 +19,7 @@ namespace RealEstate.DataAccess.Repository
             PropertyTypes = new PropertyTypeRepository(_db);
             Amenities = new AmenityRepository(_db);
             Neighbourhood = new NeighbourhoodRepository(_db);
+            ContactInfo = new ContactInfoRepository(_db);
         }
 
         public async Task SaveAsync()

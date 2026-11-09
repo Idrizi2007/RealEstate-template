@@ -6,6 +6,7 @@
         IPropertyTypeRepository PropertyTypes { get; }
         IAmenityRepository Amenities { get; }
         INeighbourhoodRepository Neighbourhood { get; }
+        IContactInfoRepository ContactInfo { get; }
         Task SaveAsync();
     }
 }
