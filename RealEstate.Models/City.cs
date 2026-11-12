@@ -2,7 +2,7 @@
 
 namespace RealEstate.Models
 {
-    public class City
+    public class City : ILookup
     {
         [Key]
         public int Id { get; set; }

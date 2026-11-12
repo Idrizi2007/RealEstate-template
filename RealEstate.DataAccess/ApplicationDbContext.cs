@@ -17,6 +17,7 @@ namespace RealEstate.DataAccess
         public DbSet<Amenity> Amenities { get; set; }
         public DbSet<Neighbourhood> Neighbourhoods { get; set; }
         public DbSet<ContactInfo> ContactInfos { get; set; }
+        public DbSet<Property> Properties { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelbuilder)
         {
@@ -26,7 +27,24 @@ namespace RealEstate.DataAccess
                                                 .WithMany()
                                                 .HasForeignKey(n => n.CityId)
                                                 .OnDelete(DeleteBehavior.Restrict);
+            modelbuilder.Entity<Property>().HasOne(p => p.PropertyType)
+                                           .WithMany()
+                                           .HasForeignKey(p => p.PropertyTypeId)
+                                           .OnDelete(DeleteBehavior.Restrict);
 
+            modelbuilder.Entity<Property>().HasOne(p => p.City)
+                                           .WithMany()
+                                           .HasForeignKey(p => p.CityId)
+                                           .OnDelete(DeleteBehavior.Restrict);
+
+            modelbuilder.Entity<Property>().HasOne(p => p.Neighbourhood)
+                                           .WithMany()
+                                           .HasForeignKey(p => p.NeighbourhoodId)
+                                           .OnDelete(DeleteBehavior.Restrict);
+
+            modelbuilder.Entity<Property>().HasIndex(p => p.ReferenceCode).IsUnique();
         }
+
+
     }
 }

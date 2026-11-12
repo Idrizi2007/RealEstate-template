@@ -7,7 +7,7 @@ using System.Text;
 
 namespace RealEstate.Models
 {
-    public class Neighbourhood
+    public class Neighbourhood : ILookup
     {
         [Key]
         public int Id { get; set; }

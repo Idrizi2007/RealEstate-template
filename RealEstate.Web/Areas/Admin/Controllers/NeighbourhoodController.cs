@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RealEstate.DataAccess.Repository.IRepository;
 using RealEstate.Models;
+using RealEstate.Web.Extensions;
 using RealEstate.Web.ViewModels;
 
 namespace RealEstate.Web.Areas.Admin.Controllers
@@ -23,11 +24,7 @@ namespace RealEstate.Web.Areas.Admin.Controllers
             var neighberhoodFromDb = new NeighbourhoodVM()
             {
                 Neighbourhood = new Neighbourhood(),
-                Cities = (await _unitOfWork.City.GetAllAsync(u => u.IsActive == true)).Select(i => new SelectListItem
-                {
-                    Text = i.Name,
-                    Value = i.Id.ToString()
-                })
+                Cities = (await _unitOfWork.City.GetAllAsync(u => u.IsActive == true)).ToSelectList()
 
             };
             

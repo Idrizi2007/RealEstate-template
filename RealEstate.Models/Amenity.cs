@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Models
 {
-    public class Amenity
+    public class Amenity : ILookup
     {
         [Key]
         public int Id { get; set; }

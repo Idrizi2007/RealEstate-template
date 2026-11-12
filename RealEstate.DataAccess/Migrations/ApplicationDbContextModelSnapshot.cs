@@ -334,6 +334,94 @@ namespace RealEstate.DataAccess.Migrations
                     b.ToTable("Neighbourhoods");
                 });
 
+            modelBuilder.Entity("RealEstate.Models.Property", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("AreaM2")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Bathrooms")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Bedrooms")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("Deposit")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<int?>("Floor")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MinimumTermMonths")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NeighbourhoodId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PropertyTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReferenceCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<decimal?>("RentPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("SalePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int?>("TotalFloors")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("YearBuilt")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("NeighbourhoodId");
+
+                    b.HasIndex("PropertyTypeId");
+
+                    b.HasIndex("ReferenceCode")
+                        .IsUnique();
+
+                    b.ToTable("Properties");
+                });
+
             modelBuilder.Entity("RealEstate.Models.PropertyType", b =>
                 {
                     b.Property<int>("Id")
@@ -412,6 +500,32 @@ namespace RealEstate.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("City");
+                });
+
+            modelBuilder.Entity("RealEstate.Models.Property", b =>
+                {
+                    b.HasOne("RealEstate.Models.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RealEstate.Models.Neighbourhood", "Neighbourhood")
+                        .WithMany()
+                        .HasForeignKey("NeighbourhoodId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("RealEstate.Models.PropertyType", "PropertyType")
+                        .WithMany()
+                        .HasForeignKey("PropertyTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("City");
+
+                    b.Navigation("Neighbourhood");
+
+                    b.Navigation("PropertyType");
                 });
 #pragma warning restore 612, 618
         }
