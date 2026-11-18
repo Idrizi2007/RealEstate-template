@@ -78,9 +78,6 @@ namespace RealEstate.Models
         [DisplayName("Përshkrimi")]
         public string? Description { get; set; }
 
-        [DisplayName("I veçuar")]
-        public bool IsFeatured { get; set; }
-
         [DisplayName("Aktiv")]
         public bool IsActive { get; set; } = true;
 

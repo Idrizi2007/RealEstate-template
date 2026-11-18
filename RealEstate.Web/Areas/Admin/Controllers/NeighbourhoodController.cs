@@ -21,6 +21,7 @@ namespace RealEstate.Web.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Upsert(int? id)
         {
+
             var neighberhoodFromDb = new NeighbourhoodVM()
             {
                 Neighbourhood = new Neighbourhood(),
@@ -42,6 +43,7 @@ namespace RealEstate.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Upsert(NeighbourhoodVM neighbourhoodVM)
         {
+
             if (ModelState.IsValid)
             {
                 bool isNew = neighbourhoodVM.Neighbourhood.Id == 0;

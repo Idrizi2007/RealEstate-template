@@ -1,8 +1,220 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Ballina";
+    ViewData["FullBleed"] = true;
+
+    var featured = new[]
+    {
+        new { Ref = "TR-1042", Listing = "Shitje", Place = "Blloku · Tiranë", Title = "Apartament 2+1 me pamje nga parku", Facts = new[] { "85 m²", "2 dhoma", "1 banjo", "Kati 6/9" }, Price = "€168.000", Extra = "ose €750 / muaj", Tone = "" },
+        new { Ref = "VL-0311", Listing = "Shitje", Place = "Uji i Ftohtë · Vlorë", Title = "Vilë me oborr, dy hapa nga deti", Facts = new[] { "240 m²", "4 dhoma", "3 banjo" }, Price = "€420.000", Extra = "", Tone = "gd-tone-2" },
+        new { Ref = "DR-0217", Listing = "Qira", Place = "Plazhi · Durrës", Title = "Studio pranë detit, e mobiluar", Facts = new[] { "42 m²", "1 banjo", "Kati 3/7" }, Price = "€420 / muaj", Extra = "depozitë €420", Tone = "gd-tone-3" }
+    };
+
+    var cities = new[]
+    {
+        new { Name = "Tiranë", Count = 24 },
+        new { Name = "Durrës", Count = 11 },
+        new { Name = "Vlorë", Count = 7 },
+        new { Name = "Sarandë", Count = 5 },
+        new { Name = "Shkodër", Count = 4 },
+        new { Name = "Korçë", Count = 3 }
+    };
+
+    var latest = new[]
+    {
+        new { Ref = "TR-1051", Listing = "Qira", Place = "Komuna e Parisit · Tiranë", Title = "Apartament 1+1 i rinovuar", Facts = new[] { "58 m²", "1 dhomë", "Kati 4/8" }, Price = "€550 / muaj", Tone = "gd-tone-2" },
+        new { Ref = "TR-1049", Listing = "Shitje", Place = "Kodra e Diellit · Tiranë", Title = "Penthouse me tarracë", Facts = new[] { "132 m²", "3 dhoma", "2 banjo" }, Price = "€310.000", Tone = "" },
+        new { Ref = "DR-0224", Listing = "Shitje", Place = "Currila · Durrës", Title = "Apartament 2+1 me ballkon nga deti", Facts = new[] { "96 m²", "2 dhoma", "Kati 5/10" }, Price = "€145.000", Tone = "gd-tone-3" },
+        new { Ref = "SR-0108", Listing = "Shitje · Qira", Place = "Qendra · Sarandë", Title = "Zyrë në katin përdhe", Facts = new[] { "70 m²", "1 banjo", "Kati 0/6" }, Price = "€130.000", Tone = "" }
+    };
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="gd-hero">
+    <div class="container gd-container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-7">
+                <div class="gd-eyebrow">Agjenci imobiliare · Shqipëri</div>
+                <h1>Shtëpi me dritë, në lagjet që <em>i njihni.</em></h1>
+                <p class="gd-lead">Prona për shitje dhe me qira, të vizituara dhe të fotografuara nga ne. Na shkruani dhe ju tregojmë pronën sot.</p>
+
+                <form class="gd-ledger" method="get" role="search">
+                    <div class="gd-tabs">
+                        <input type="radio" class="btn-check" name="listing" id="listingSale" value="shitje" checked />
+                        <label class="gd-tab" for="listingSale">Shitje</label>
+                        <input type="radio" class="btn-check" name="listing" id="listingRent" value="qira" />
+                        <label class="gd-tab" for="listingRent">Qira</label>
+                    </div>
+                    <div class="gd-fields">
+                        <div class="gd-field">
+                            <label for="searchCity">Qyteti</label>
+                            <select class="form-select" id="searchCity" name="city">
+                                <option value="">Të gjitha</option>
+                                @foreach (var city in cities)
+                                {
+                                    <option>@city.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="gd-field">
+                            <label for="searchType">Lloji</label>
+                            <select class="form-select" id="searchType" name="type">
+                                <option value="">Të gjitha</option>
+                                <option>Apartament</option>
+                                <option>Vilë</option>
+                                <option>Zyrë</option>
+                                <option>Truall</option>
+                            </select>
+                        </div>
+                        <div class="gd-field">
+                            <label for="searchPrice">Çmimi deri</label>
+                            <select class="form-select" id="searchPrice" name="maxPrice">
+                                <option value="">Pa kufi</option>
+                                <option value="100000">€100.000</option>
+                                <option value="200000">€200.000</option>
+                                <option value="350000">€350.000</option>
+                                <option value="500000">€500.000</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-gd">Kërko</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-5">
+                <a class="gd-card" href="#te-zgjedhura">
+                    <span class="gd-photo gd-tall gd-featured">
+                        <span class="gd-ref">@featured[0].Ref</span>
+                        <span class="gd-photo-empty"><i class="bi bi-image"></i></span>
+                        <span class="gd-caption"><span>@featured[0].Place</span><strong>@featured[0].Price</strong></span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="gd-section" id="te-zgjedhura">
+    <div class="container gd-container">
+        <div class="gd-section-head">
+            <div>
+                <div class="gd-eyebrow">Zgjedhja jonë</div>
+                <h2>Pronat e <em>zgjedhura</em></h2>
+            </div>
+            <p>Ato që do t'i tregonim së pari një miku.</p>
+        </div>
+        <div class="row g-5">
+            <div class="col-lg-7">
+                <a class="gd-card gd-card-lg" href="#">
+                    <span class="gd-photo gd-wide gd-featured @featured[0].Tone">
+                        <span class="gd-chip">@featured[0].Listing</span>
+                        <span class="gd-ref">@featured[0].Ref</span>
+                        <span class="gd-photo-empty"><i class="bi bi-image"></i></span>
+                    </span>
+                    <span class="gd-eyebrow">@featured[0].Place</span>
+                    <h3 class="gd-card-title">@featured[0].Title</h3>
+                    <ul class="gd-facts">
+                        @foreach (var fact in featured[0].Facts)
+                        {
+                            <li>@fact</li>
+                        }
+                    </ul>
+                    <span class="gd-price"><strong>@featured[0].Price</strong><span>@featured[0].Extra</span></span>
+                </a>
+            </div>
+            <div class="col-lg-5">
+                <div class="gd-stack">
+                    @foreach (var item in featured.Skip(1))
+                    {
+                        <a class="gd-card gd-card-h" href="#">
+                            <span class="gd-photo gd-featured @item.Tone">
+                                <span class="gd-chip">@item.Listing</span>
+                                <span class="gd-photo-empty"><i class="bi bi-image"></i></span>
+                            </span>
+                            <span class="gd-card-body">
+                                <span class="gd-eyebrow">@item.Place</span>
+                                <h3 class="gd-card-title">@item.Title</h3>
+                                <ul class="gd-facts">
+                                    @foreach (var fact in item.Facts)
+                                    {
+                                        <li>@fact</li>
+                                    }
+                                </ul>
+                                <span class="gd-price"><strong>@item.Price</strong><span>@item.Extra</span></span>
+                                <span class="gd-mono gd-muted small">REF @item.Ref</span>
+                            </span>
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="gd-section" id="qytetet">
+    <div class="container gd-container">
+        <div class="gd-section-head">
+            <div>
+                <div class="gd-eyebrow">Ku punojmë</div>
+                <h2>Kërkoni sipas <em>qytetit</em></h2>
+            </div>
+        </div>
+        <div class="gd-cities">
+            @foreach (var city in cities)
+            {
+                <a class="gd-city" href="#">
+                    <b>@city.Name</b>
+                    <span>@city.Count prona <i class="bi bi-arrow-right ms-1"></i></span>
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="gd-section" id="te-fundit">
+    <div class="container gd-container">
+        <div class="gd-section-head">
+            <div>
+                <div class="gd-eyebrow">Shtuar së fundmi</div>
+                <h2>Të <em>fundit</em></h2>
+            </div>
+            <a class="btn-gd-line text-decoration-none" href="#">Të gjitha pronat <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="gd-row">
+            @foreach (var item in latest)
+            {
+                <a class="gd-card" href="#">
+                    <span class="gd-photo @item.Tone">
+                        <span class="gd-chip">@item.Listing</span>
+                        <span class="gd-ref">@item.Ref</span>
+                        <span class="gd-photo-empty"><i class="bi bi-image"></i></span>
+                    </span>
+                    <span class="gd-eyebrow">@item.Place</span>
+                    <h3 class="gd-card-title">@item.Title</h3>
+                    <ul class="gd-facts">
+                        @foreach (var fact in item.Facts)
+                        {
+                            <li>@fact</li>
+                        }
+                    </ul>
+                    <span class="gd-price"><strong>@item.Price</strong></span>
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="gd-band">
+    <div class="container gd-container">
+        <div class="row g-4 align-items-end">
+            <div class="col-lg-7">
+                <div class="gd-eyebrow">Pa formularë, pa pritje</div>
+                <h2>Shkruani kodin e pronës dhe ju përgjigjemi brenda ditës.</h2>
+                <p>Çdo pronë ka një kod REF. Na e dërgoni në WhatsApp ose na telefononi.</p>
+            </div>
+            <div class="col-lg-5">
+                <div class="gd-actions justify-content-lg-end">
+                    <a class="btn-gd text-decoration-none" href="#kontakti"><i class="bi bi-whatsapp"></i>Shkruaj në WhatsApp</a>
+                    <a class="btn-gd-line text-decoration-none" href="#kontakti"><i class="bi bi-telephone"></i>Telefono</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

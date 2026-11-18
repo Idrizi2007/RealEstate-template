@@ -374,9 +374,6 @@ namespace RealEstate.DataAccess.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsFeatured")
-                        .HasColumnType("bit");
-
                     b.Property<int?>("MinimumTermMonths")
                         .HasColumnType("int");
 

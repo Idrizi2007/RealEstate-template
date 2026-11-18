@@ -1,0 +1,185 @@
+@using RealEstate.Web.ViewModels
+@model PropertyVM
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">@(Model.Property.Id != 0 ? "Ndrysho pronën" : "Shto pronë të re")</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form method="post" class="row">
+            <input asp-for="Property.Id" hidden />
+            <input asp-for="Property.CreatedAt" hidden />
+
+            <div class="border p-3">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <h5 class="pt-2">Të dhënat bazë</h5>
+                <div class="row">
+                    <div class="form-floating py-2 col-md-4">
+                        <input asp-for="Property.ReferenceCode" class="form-control border-0 shadow" />
+                        <label asp-for="Property.ReferenceCode" class="ms-2"></label>
+                        <span asp-validation-for="Property.ReferenceCode" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating py-2 col-md-8">
+                        <input asp-for="Property.Title" class="form-control border-0 shadow" />
+                        <label asp-for="Property.Title" class="ms-2"></label>
+                        <span asp-validation-for="Property.Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating py-2 col-md-4">
+                        <select asp-for="Property.PropertyTypeId" asp-items="Model.PropertyTypes" class="form-select border-0 shadow">
+                            <option disabled selected value="">--Zgjidh llojin--</option>
+                        </select>
+                        <label asp-for="Property.PropertyTypeId" class="ms-2"></label>
+                        <span asp-validation-for="Property.PropertyTypeId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <h5 class="pt-3">Vendndodhja</h5>
+                <div class="row">
+                    <div class="form-floating py-2 col-md-4">
+                        <select asp-for="Property.CityId" asp-items="Model.Cities" class="form-select border-0 shadow">
+                            <option disabled selected value="">--Zgjidh qytetin--</option>
+                        </select>
+                        <label asp-for="Property.CityId" class="ms-2"></label>
+                        <span asp-validation-for="Property.CityId" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating py-2 col-md-4">
+                        <select asp-for="Property.NeighbourhoodId" asp-items="Model.Neighbourhoods" class="form-select border-0 shadow">
+                            <option selected value="">--Pa lagje--</option>
+                        </select>
+                        <label asp-for="Property.NeighbourhoodId" class="ms-2"></label>
+                        <span asp-validation-for="Property.NeighbourhoodId" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating py-2 col-md-4">
+                        <input asp-for="Property.Address" class="form-control border-0 shadow" />
+                        <label asp-for="Property.Address" class="ms-2"></label>
+                        <span asp-validation-for="Property.Address" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <h5 class="pt-3">Çmimi</h5>
+                <div class="row">
+                    <div class="form-floating py-2 col-md-3">
+                        <input asp-for="Property.SalePrice" class="form-control border-0 shadow" />
+                        <label asp-for="Property.SalePrice" class="ms-2"></label>
+                        <span asp-validation-for="Property.SalePrice" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating py-2 col-md-3">
+                        <input asp-for="Property.RentPrice" class="form-control border-0 shadow" />
+                        <label asp-for="Property.RentPrice" class="ms-2"></label>
+                        <span asp-validation-for="Property.RentPrice" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating py-2 col-md-3">
+                        <input asp-for="Property.Deposit" class="form-control border-0 shadow" />
+                        <label asp-for="Property.Deposit" class="ms-2"></label>
+                        <span asp-validation-for="Property.Deposit" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating py-2 col-md-3">
+                        <input asp-for="Property.MinimumTermMonths" class="form-control border-0 shadow" />
+                        <label asp-for="Property.MinimumTermMonths" class="ms-2"></label>
+                        <span asp-validation-for="Property.MinimumTermMonths" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <h5 class="pt-3">Detajet</h5>
+                <div class="row">
+                    <div class="form-floating py-2 col-md-4">
+                        <input asp-for="Property.AreaM2" class="form-control border-0 shadow" />
+                        <label asp-for="Property.AreaM2" class="ms-2"></label>
+                        <span asp-validation-for="Property.AreaM2" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating py-2 col-md-4">
+                        <input asp-for="Property.Bedrooms" class="form-control border-0 shadow" />
+                        <label asp-for="Property.Bedrooms" class="ms-2"></label>
+                        <span asp-validation-for="Property.Bedrooms" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating py-2 col-md-4">
+                        <input asp-for="Property.Bathrooms" class="form-control border-0 shadow" />
+                        <label asp-for="Property.Bathrooms" class="ms-2"></label>
+                        <span asp-validation-for="Property.Bathrooms" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating py-2 col-md-4">
+                        <input asp-for="Property.Floor" class="form-control border-0 shadow" />
+                        <label asp-for="Property.Floor" class="ms-2"></label>
+                        <span asp-validation-for="Property.Floor" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating py-2 col-md-4">
+                        <input asp-for="Property.TotalFloors" class="form-control border-0 shadow" />
+                        <label asp-for="Property.TotalFloors" class="ms-2"></label>
+                        <span asp-validation-for="Property.TotalFloors" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating py-2 col-md-4">
+                        <input asp-for="Property.YearBuilt" class="form-control border-0 shadow" />
+                        <label asp-for="Property.YearBuilt" class="ms-2"></label>
+                        <span asp-validation-for="Property.YearBuilt" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <h5 class="pt-3">Përshkrimi</h5>
+                <div class="row">
+                    <div class="form-floating py-2 col-12">
+                        <textarea asp-for="Property.Description" class="form-control border-0 shadow" style="height: 180px"></textarea>
+                        <label asp-for="Property.Description" class="ms-2"></label>
+                        <span asp-validation-for="Property.Description" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-4 pt-3 pb-2">
+                    <div class="form-check">
+                        <input asp-for="Property.IsActive" class="form-check-input" />
+                        <label asp-for="Property.IsActive" class="form-check-label"></label>
+                    </div>
+                </div>
+
+                <div class="row pt-2">
+                    <div class="col-6 col-md-3">
+                        <button type="submit" class="btn btn-primary form-control">
+                            @(Model.Property.Id != 0 ? "Ruaj" : "Krijo")
+                        </button>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a asp-area="Admin" asp-controller="Property" asp-action="Index" class="btn btn-outline-secondary border form-control">
+                            Kthehu
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(function () {
+            var $city = $('#Property_CityId');
+            var $hood = $('#Property_NeighbourhoodId');
+            var saved = $hood.val();
+            var neighbourhoods = [];
+
+            function fill() {
+                var cityId = $city.val();
+                $hood.find('option:not(:first)').remove();
+                neighbourhoods
+                    .filter(function (n) { return String(n.cityId) === cityId && (n.isActive || String(n.id) === saved); })
+                    .forEach(function (n) { $hood.append($('<option>').val(n.id).text(n.name)); });
+                $hood.val($hood.find('option[value="' + saved + '"]').length ? saved : '');
+                $hood.prop('disabled', !cityId);
+            }
+
+            $.get('/Admin/Neighbourhood/GetAll', function (response) {
+                neighbourhoods = response.data;
+                fill();
+            });
+
+            $city.on('change', function () {
+                saved = '';
+                fill();
+            });
+        });
+    </script>
+}
