@@ -93,7 +93,7 @@ namespace RealEstate.Web.Areas.Admin.Controllers
                     
 
                     int SortOrder = (await _unitOfWork.PropertyImages.GetAllAsync(u => u.PropertyId == propertyvm.Property.Id)).Count();
-                    var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp", ".avif" };
+                    var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".avif", ".webp "};
                     
                     foreach (var image in propertyvm.NewImages)
                     {
@@ -101,7 +101,7 @@ namespace RealEstate.Web.Areas.Admin.Controllers
 
                         if (!allowedExtensions.Contains(extension))
                         {
-                            TempData["error"] = "Formatet e lejuara të imazheve janë: .jpg, .jpeg, .png, .webp, .avif";
+                            TempData["error"] = $"Formati {extension} nuk është i lejuar për imazhet. Formatet e lejuara janë: {string.Join(", ", allowedExtensions)}";
                             continue;
                         }
 
@@ -152,7 +152,7 @@ namespace RealEstate.Web.Areas.Admin.Controllers
         public async Task<IActionResult> GetAll()
         {
 
-            var propertyList = await _unitOfWork.Properties.GetAllAsync(includeProperties: "PropertyType,Neighbourhood,City");
+            var propertyList = await _unitOfWork.Properties.GetAllAsync(includeProperties: "PropertyType,Neighbourhood,City,Images,");
             return Json(new { data = propertyList });
         }
         [HttpDelete]

@@ -1,37 +1,37 @@
-<div class="card shadow border-0 mt-4">
-    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h2 class="text-white py-2">Pronat</h2>
-            </div>
-        </div>
-    </div>
-    <div class="card-body p-4">
-        <div class="row pb-3">
-            <div class="col-6"></div>
-            <div class="col-6 text-end">
-                <a asp-area="Admin" asp-controller="Property" asp-action="Upsert" class="btn btn-primary">
-                    Shto pronë të re
-                </a>
-            </div>
-        </div>
+@{
+    ViewData["Title"] = "Pronat";
+}
 
-        <table id="tblData" class="table table-bordered table-striped" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Kodi</th>
-                    <th>Titulli</th>
-                    <th>Lloji</th>
-                    <th>Vendndodhja</th>
-                    <th>Çmimi</th>
-                    <th>Aktiv</th>
-                    <th></th>
-                </tr>
-            </thead>
-        </table>
+<div class="gd-admin-head">
+    <div>
+        <div class="gd-eyebrow">Paneli</div>
+        <h1>Pronat</h1>
     </div>
+    <a asp-area="Admin" asp-controller="Property" asp-action="Upsert" class="btn-gd text-decoration-none">
+        <i class="bi bi-plus-lg"></i>Shto pronë të re
+    </a>
+</div>
+
+<div class="gd-toolbar">
+    <div class="gd-search">
+        <i class="bi bi-search"></i>
+        <input type="search" id="propertySearch" class="form-control" placeholder="Kërko sipas REF, titullit ose qytetit…" aria-label="Kërko pronat" />
+    </div>
+    <div class="gd-amenities" role="group" aria-label="Filtro sipas statusit">
+        <input type="radio" class="btn-check" name="statusFilter" id="filterAll" value="all" checked />
+        <label class="gd-amenity" for="filterAll">Të gjitha</label>
+        <input type="radio" class="btn-check" name="statusFilter" id="filterActive" value="active" />
+        <label class="gd-amenity" for="filterActive">Aktive</label>
+        <input type="radio" class="btn-check" name="statusFilter" id="filterInactive" value="inactive" />
+        <label class="gd-amenity" for="filterInactive">Joaktive</label>
+    </div>
+    <div class="gd-count" id="propertyCount" aria-live="polite"></div>
+</div>
+
+<div class="gd-prop-grid" id="propertyGrid">
+    <div class="gd-empty">Duke ngarkuar…</div>
 </div>
 
 @section Scripts {
-    <script src="~/js/property.js"></script>
+    <script src="~/js/property.js" asp-append-version="true"></script>
 }
