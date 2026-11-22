@@ -16,5 +16,17 @@ namespace RealEstate.Web.ViewModels
 
         [ValidateNever]
         public IEnumerable<SelectListItem>? PropertyTypes { get; set; }
+
+        [ValidateNever]
+        public IEnumerable<Amenity>? Amenities { get; set; }
+
+        public List<int> SelectedAmenityIds { get; set; } = new();
+
+        [ValidateNever]
+        public IEnumerable<PropertyImage>? Images { get; set; }
+
+
+        [ValidateNever]
+        public List<IFormFile>? NewImages { get; set; }
     }
 }

@@ -1,160 +1,254 @@
 @using RealEstate.Web.ViewModels
 @model PropertyVM
+@{
+    var isEdit = Model.Property.Id != 0;
+    ViewData["Title"] = isEdit ? "Ndrysho pronën" : "Shto pronë të re";
+    var hasImages = Model.Images != null && Model.Images.Any();
+}
 
-<div class="card shadow border-0 mt-4">
-    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h2 class="text-white py-2">@(Model.Property.Id != 0 ? "Ndrysho pronën" : "Shto pronë të re")</h2>
+<div class="gd-admin-head">
+    <div>
+        <div class="gd-eyebrow">Pronat</div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    @if (isEdit && !string.IsNullOrEmpty(Model.Property.ReferenceCode))
+    {
+        <span class="gd-ref-stamp">REF @Model.Property.ReferenceCode</span>
+    }
+</div>
+
+<form method="post" enctype="multipart/form-data" class="gd-form">
+    <input asp-for="Property.Id" hidden />
+    <input asp-for="Property.CreatedAt" hidden />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <section class="gd-panel">
+        <div class="gd-panel-head"><span class="gd-panel-num">01</span><h2>Të dhënat bazë</h2></div>
+        <div class="row g-3">
+            <div class="form-floating col-md-4">
+                <input asp-for="Property.ReferenceCode" class="form-control" placeholder=" " />
+                <label asp-for="Property.ReferenceCode" class="ms-2"></label>
+                <span asp-validation-for="Property.ReferenceCode" class="text-danger"></span>
+            </div>
+            <div class="form-floating col-md-8">
+                <input asp-for="Property.Title" class="form-control" placeholder=" " />
+                <label asp-for="Property.Title" class="ms-2"></label>
+                <span asp-validation-for="Property.Title" class="text-danger"></span>
+            </div>
+            <div class="form-floating col-md-4">
+                <select asp-for="Property.PropertyTypeId" asp-items="Model.PropertyTypes" class="form-select">
+                    <option disabled selected value="">--Zgjidh llojin--</option>
+                </select>
+                <label asp-for="Property.PropertyTypeId" class="ms-2"></label>
+                <span asp-validation-for="Property.PropertyTypeId" class="text-danger"></span>
             </div>
         </div>
-    </div>
-    <div class="card-body p-4">
-        <form method="post" class="row">
-            <input asp-for="Property.Id" hidden />
-            <input asp-for="Property.CreatedAt" hidden />
+    </section>
 
-            <div class="border p-3">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <section class="gd-panel">
+        <div class="gd-panel-head"><span class="gd-panel-num">02</span><h2>Vendndodhja</h2></div>
+        <div class="row g-3">
+            <div class="form-floating col-md-4">
+                <select asp-for="Property.CityId" asp-items="Model.Cities" class="form-select">
+                    <option disabled selected value="">--Zgjidh qytetin--</option>
+                </select>
+                <label asp-for="Property.CityId" class="ms-2"></label>
+                <span asp-validation-for="Property.CityId" class="text-danger"></span>
+            </div>
+            <div class="form-floating col-md-4">
+                <select asp-for="Property.NeighbourhoodId" asp-items="Model.Neighbourhoods" class="form-select">
+                    <option selected value="">--Pa lagje--</option>
+                </select>
+                <label asp-for="Property.NeighbourhoodId" class="ms-2"></label>
+                <span asp-validation-for="Property.NeighbourhoodId" class="text-danger"></span>
+            </div>
+            <div class="form-floating col-md-4">
+                <input asp-for="Property.Address" class="form-control" placeholder=" " />
+                <label asp-for="Property.Address" class="ms-2"></label>
+                <span asp-validation-for="Property.Address" class="text-danger"></span>
+            </div>
+        </div>
+    </section>
 
-                <h5 class="pt-2">Të dhënat bazë</h5>
-                <div class="row">
-                    <div class="form-floating py-2 col-md-4">
-                        <input asp-for="Property.ReferenceCode" class="form-control border-0 shadow" />
-                        <label asp-for="Property.ReferenceCode" class="ms-2"></label>
-                        <span asp-validation-for="Property.ReferenceCode" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating py-2 col-md-8">
-                        <input asp-for="Property.Title" class="form-control border-0 shadow" />
-                        <label asp-for="Property.Title" class="ms-2"></label>
-                        <span asp-validation-for="Property.Title" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating py-2 col-md-4">
-                        <select asp-for="Property.PropertyTypeId" asp-items="Model.PropertyTypes" class="form-select border-0 shadow">
-                            <option disabled selected value="">--Zgjidh llojin--</option>
-                        </select>
-                        <label asp-for="Property.PropertyTypeId" class="ms-2"></label>
-                        <span asp-validation-for="Property.PropertyTypeId" class="text-danger"></span>
-                    </div>
-                </div>
+    <section class="gd-panel" id="priceSection">
+        <div class="gd-panel-head"><span class="gd-panel-num">03</span><h2>Çmimi</h2></div>
+        <p class="gd-panel-note">Zgjidh njërën ose të dyja.</p>
+        <div class="gd-amenities" role="group" aria-label="Lloji i shpalljes">
+            <input type="checkbox" class="btn-check" id="forSale" autocomplete="off"
+                   checked="@(Model.Property.SalePrice != null)" />
+            <label class="gd-amenity" for="forSale"><i class="bi bi-tag"></i>Në shitje</label>
+            <input type="checkbox" class="btn-check" id="forRent" autocomplete="off"
+                   checked="@(Model.Property.RentPrice != null || Model.Property.Deposit != null || Model.Property.MinimumTermMonths != null)" />
+            <label class="gd-amenity" for="forRent"><i class="bi bi-key"></i>Me qira</label>
+        </div>
+        <div class="text-danger mt-3 d-none" id="listingError" role="alert"></div>
+        <div class="row g-3 mt-1">
+            <div class="form-floating col-sm-6 col-lg-3" data-listing="sale">
+                <input asp-for="Property.SalePrice" class="form-control" placeholder=" " />
+                <label asp-for="Property.SalePrice" class="ms-2"></label>
+                <span asp-validation-for="Property.SalePrice" class="text-danger"></span>
+            </div>
+            <div class="form-floating col-sm-6 col-lg-3" data-listing="rent">
+                <input asp-for="Property.RentPrice" class="form-control" placeholder=" " />
+                <label asp-for="Property.RentPrice" class="ms-2"></label>
+                <span asp-validation-for="Property.RentPrice" class="text-danger"></span>
+            </div>
+            <div class="form-floating col-sm-6 col-lg-3" data-listing="rent">
+                <input asp-for="Property.Deposit" class="form-control" placeholder=" " />
+                <label asp-for="Property.Deposit" class="ms-2"></label>
+                <span asp-validation-for="Property.Deposit" class="text-danger"></span>
+            </div>
+            <div class="form-floating col-sm-6 col-lg-3" data-listing="rent">
+                <input asp-for="Property.MinimumTermMonths" class="form-control" placeholder=" " />
+                <label asp-for="Property.MinimumTermMonths" class="ms-2"></label>
+                <span asp-validation-for="Property.MinimumTermMonths" class="text-danger"></span>
+            </div>
+        </div>
+    </section>
 
-                <h5 class="pt-3">Vendndodhja</h5>
-                <div class="row">
-                    <div class="form-floating py-2 col-md-4">
-                        <select asp-for="Property.CityId" asp-items="Model.Cities" class="form-select border-0 shadow">
-                            <option disabled selected value="">--Zgjidh qytetin--</option>
-                        </select>
-                        <label asp-for="Property.CityId" class="ms-2"></label>
-                        <span asp-validation-for="Property.CityId" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating py-2 col-md-4">
-                        <select asp-for="Property.NeighbourhoodId" asp-items="Model.Neighbourhoods" class="form-select border-0 shadow">
-                            <option selected value="">--Pa lagje--</option>
-                        </select>
-                        <label asp-for="Property.NeighbourhoodId" class="ms-2"></label>
-                        <span asp-validation-for="Property.NeighbourhoodId" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating py-2 col-md-4">
-                        <input asp-for="Property.Address" class="form-control border-0 shadow" />
-                        <label asp-for="Property.Address" class="ms-2"></label>
-                        <span asp-validation-for="Property.Address" class="text-danger"></span>
-                    </div>
-                </div>
+    <section class="gd-panel">
+        <div class="gd-panel-head"><span class="gd-panel-num">04</span><h2>Detajet</h2></div>
+        <div class="row g-3">
+            <div class="form-floating col-6 col-md-4 col-xl-2">
+                <input asp-for="Property.AreaM2" class="form-control" placeholder=" " />
+                <label asp-for="Property.AreaM2" class="ms-2"></label>
+                <span asp-validation-for="Property.AreaM2" class="text-danger"></span>
+            </div>
+            <div class="form-floating col-6 col-md-4 col-xl-2">
+                <input asp-for="Property.Bedrooms" class="form-control" placeholder=" " />
+                <label asp-for="Property.Bedrooms" class="ms-2"></label>
+                <span asp-validation-for="Property.Bedrooms" class="text-danger"></span>
+            </div>
+            <div class="form-floating col-6 col-md-4 col-xl-2">
+                <input asp-for="Property.Bathrooms" class="form-control" placeholder=" " />
+                <label asp-for="Property.Bathrooms" class="ms-2"></label>
+                <span asp-validation-for="Property.Bathrooms" class="text-danger"></span>
+            </div>
+            <div class="form-floating col-6 col-md-4 col-xl-2">
+                <input asp-for="Property.Floor" class="form-control" placeholder=" " />
+                <label asp-for="Property.Floor" class="ms-2"></label>
+                <span asp-validation-for="Property.Floor" class="text-danger"></span>
+            </div>
+            <div class="form-floating col-6 col-md-4 col-xl-2">
+                <input asp-for="Property.TotalFloors" class="form-control" placeholder=" " />
+                <label asp-for="Property.TotalFloors" class="ms-2"></label>
+                <span asp-validation-for="Property.TotalFloors" class="text-danger"></span>
+            </div>
+            <div class="form-floating col-6 col-md-4 col-xl-2">
+                <input asp-for="Property.YearBuilt" class="form-control" placeholder=" " />
+                <label asp-for="Property.YearBuilt" class="ms-2"></label>
+                <span asp-validation-for="Property.YearBuilt" class="text-danger"></span>
+            </div>
+        </div>
+    </section>
 
-                <h5 class="pt-3">Çmimi</h5>
-                <div class="row">
-                    <div class="form-floating py-2 col-md-3">
-                        <input asp-for="Property.SalePrice" class="form-control border-0 shadow" />
-                        <label asp-for="Property.SalePrice" class="ms-2"></label>
-                        <span asp-validation-for="Property.SalePrice" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating py-2 col-md-3">
-                        <input asp-for="Property.RentPrice" class="form-control border-0 shadow" />
-                        <label asp-for="Property.RentPrice" class="ms-2"></label>
-                        <span asp-validation-for="Property.RentPrice" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating py-2 col-md-3">
-                        <input asp-for="Property.Deposit" class="form-control border-0 shadow" />
-                        <label asp-for="Property.Deposit" class="ms-2"></label>
-                        <span asp-validation-for="Property.Deposit" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating py-2 col-md-3">
-                        <input asp-for="Property.MinimumTermMonths" class="form-control border-0 shadow" />
-                        <label asp-for="Property.MinimumTermMonths" class="ms-2"></label>
-                        <span asp-validation-for="Property.MinimumTermMonths" class="text-danger"></span>
-                    </div>
-                </div>
+    <section class="gd-panel">
+        <div class="gd-panel-head"><span class="gd-panel-num">05</span><h2>Përshkrimi</h2></div>
+        <label asp-for="Property.Description" class="visually-hidden"></label>
+        <textarea asp-for="Property.Description" class="form-control" rows="10"></textarea>
+        <span asp-validation-for="Property.Description" class="text-danger"></span>
+    </section>
 
-                <h5 class="pt-3">Detajet</h5>
-                <div class="row">
-                    <div class="form-floating py-2 col-md-4">
-                        <input asp-for="Property.AreaM2" class="form-control border-0 shadow" />
-                        <label asp-for="Property.AreaM2" class="ms-2"></label>
-                        <span asp-validation-for="Property.AreaM2" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating py-2 col-md-4">
-                        <input asp-for="Property.Bedrooms" class="form-control border-0 shadow" />
-                        <label asp-for="Property.Bedrooms" class="ms-2"></label>
-                        <span asp-validation-for="Property.Bedrooms" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating py-2 col-md-4">
-                        <input asp-for="Property.Bathrooms" class="form-control border-0 shadow" />
-                        <label asp-for="Property.Bathrooms" class="ms-2"></label>
-                        <span asp-validation-for="Property.Bathrooms" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating py-2 col-md-4">
-                        <input asp-for="Property.Floor" class="form-control border-0 shadow" />
-                        <label asp-for="Property.Floor" class="ms-2"></label>
-                        <span asp-validation-for="Property.Floor" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating py-2 col-md-4">
-                        <input asp-for="Property.TotalFloors" class="form-control border-0 shadow" />
-                        <label asp-for="Property.TotalFloors" class="ms-2"></label>
-                        <span asp-validation-for="Property.TotalFloors" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating py-2 col-md-4">
-                        <input asp-for="Property.YearBuilt" class="form-control border-0 shadow" />
-                        <label asp-for="Property.YearBuilt" class="ms-2"></label>
-                        <span asp-validation-for="Property.YearBuilt" class="text-danger"></span>
-                    </div>
-                </div>
+    <section class="gd-panel">
+        <div class="gd-panel-head"><span class="gd-panel-num">06</span><h2>Pajisjet</h2></div>
+        @if (Model.Amenities != null && Model.Amenities.Any())
+        {
+            <p class="gd-panel-note">Kliko për t'i zgjedhur ose hequr.</p>
+            <div class="gd-amenities">
+                @foreach (var amenity in Model.Amenities)
+                {
+                    <input type="checkbox" class="btn-check" id="amenity_@amenity.Id" autocomplete="off"
+                           name="SelectedAmenityIds" value="@amenity.Id"
+                           checked="@Model.SelectedAmenityIds.Contains(amenity.Id)" />
+                    <label class="gd-amenity" for="amenity_@amenity.Id">
+                        @if (!string.IsNullOrEmpty(amenity.IconClass))
+                        {
+                            <i class="@amenity.IconClass"></i>
+                        }
+                        @amenity.Name
+                    </label>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="gd-panel-note mb-0">Ende nuk ka pajisje. Shtoji te <a asp-area="Admin" asp-controller="Amenity" asp-action="Index">Pajisjet</a>.</p>
+        }
+    </section>
 
-                <h5 class="pt-3">Përshkrimi</h5>
-                <div class="row">
-                    <div class="form-floating py-2 col-12">
-                        <textarea asp-for="Property.Description" class="form-control border-0 shadow" style="height: 180px"></textarea>
-                        <label asp-for="Property.Description" class="ms-2"></label>
-                        <span asp-validation-for="Property.Description" class="text-danger"></span>
-                    </div>
-                </div>
+    <section class="gd-panel">
+        <div class="gd-panel-head"><span class="gd-panel-num">07</span><h2>Fotot</h2></div>
+        <label class="gd-drop" id="photoDrop">
+            <i class="bi bi-images"></i>
+            <strong>Tërhiq fotot këtu ose kliko për t'i zgjedhur</strong>
+            <span>JPG, PNG, WEBP ose AVIF · deri në 10 MB secila</span>
+            <input asp-for="NewImages" class="visually-hidden" accept=".jpg,.jpeg,.png,.webp,.avif" />
+        </label>
+        <span asp-validation-for="NewImages" class="text-danger"></span>
 
-                <div class="d-flex gap-4 pt-3 pb-2">
-                    <div class="form-check">
-                        <input asp-for="Property.IsActive" class="form-check-input" />
-                        <label asp-for="Property.IsActive" class="form-check-label"></label>
-                    </div>
-                </div>
+        <div id="newPreviewWrap" class="d-none">
+            <div class="gd-eyebrow gd-photo-label">Të reja · ruhen kur shtyp Ruaj</div>
+            <div class="gd-photo-grid" id="newPreview"></div>
+        </div>
 
-                <div class="row pt-2">
-                    <div class="col-6 col-md-3">
-                        <button type="submit" class="btn btn-primary form-control">
-                            @(Model.Property.Id != 0 ? "Ruaj" : "Krijo")
-                        </button>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <a asp-area="Admin" asp-controller="Property" asp-action="Index" class="btn btn-outline-secondary border form-control">
-                            Kthehu
-                        </a>
-                    </div>
+        @if (hasImages)
+        {
+            <div id="savedWrap">
+                <div class="gd-eyebrow gd-photo-label">Të ruajtura</div>
+                <div class="gd-photo-grid" id="imageGrid">
+                    @foreach (var image in Model.Images!)
+                    {
+                        <div class="gd-photo-card @(image.IsPrimary ? "is-primary" : "")" id="image_@image.Id">
+                            <div class="gd-photo">
+                                <span class="gd-chip primary-badge @(image.IsPrimary ? "" : "d-none")"><i class="bi bi-star-fill me-1"></i>Kryesore</span>
+                                <img src="@image.ImageUrl" alt="@(image.AltText ?? Model.Property.Title)" />
+                            </div>
+                            <div class="gd-photo-actions">
+                                <button type="button" class="btn-gd-line set-primary @(image.IsPrimary ? "d-none" : "")" data-id="@image.Id">
+                                    Bëje kryesore
+                                </button>
+                                <button type="button" class="gd-icon-btn is-danger ms-auto delete-image" data-id="@image.Id" aria-label="Fshi foton" title="Fshi">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
-        </form>
+        }
+    </section>
+
+    <div class="gd-savebar">
+        <div class="form-check form-switch">
+            <input asp-for="Property.IsActive" class="form-check-input" role="switch" />
+            <label asp-for="Property.IsActive" class="form-check-label" id="activeLabel">@(Model.Property.IsActive ? "Aktive" : "Joaktive")</label>
+        </div>
+        <small>Prona joaktive nuk shfaqet në faqe.</small>
+        <div class="gd-savebar-actions">
+            <a asp-area="Admin" asp-controller="Property" asp-action="Index" class="btn-gd-line text-decoration-none">Kthehu</a>
+            <button type="submit" class="btn-gd">
+                <i class="bi bi-check2"></i>@(isEdit ? "Ruaj" : "Krijo")
+            </button>
+        </div>
     </div>
-</div>
+</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.tiny.cloud/1/rceip5n1t62fikik3igj758bybiaqnx3x6m4s6s4jh9m37vo/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
     <script>
+        tinymce.init({
+            selector: '#Property_Description',
+            height: 340,
+            menubar: false,
+            branding: false,
+            promotion: false,
+            plugins: 'autolink lists link wordcount',
+            toolbar: 'undo redo | blocks | bold italic underline | bullist numlist | link | removeformat',
+            block_formats: 'Paragraf=p; Titull=h3; Nëntitull=h4',
+            content_style: 'body { font-family: "Schibsted Grotesk", "Segoe UI", Arial, sans-serif; font-size: 16px; line-height: 1.6; color: #16211F; }'
+        });
+
         $(function () {
             var $city = $('#Property_CityId');
             var $hood = $('#Property_NeighbourhoodId');
@@ -179,6 +273,157 @@
             $city.on('change', function () {
                 saved = '';
                 fill();
+            });
+
+            var $forSale = $('#forSale');
+            var $forRent = $('#forRent');
+            var $listingError = $('#listingError');
+
+            function toggleListing() {
+                $('[data-listing="sale"]').toggleClass('d-none', !$forSale.prop('checked'));
+                $('[data-listing="rent"]').toggleClass('d-none', !$forRent.prop('checked'));
+                if ($forSale.prop('checked') || $forRent.prop('checked')) {
+                    $listingError.addClass('d-none');
+                }
+            }
+
+            $('#Property_IsActive').on('change', function () {
+                $('#activeLabel').text(this.checked ? 'Aktive' : 'Joaktive');
+            });
+
+            $forSale.add($forRent).on('change', toggleListing);
+            toggleListing();
+
+            $('#Property_SalePrice, #Property_RentPrice').on('input', function () {
+                $(this).removeClass('is-invalid');
+            });
+
+            $('form.gd-form').on('submit', function (e) {
+                var sale = $forSale.prop('checked');
+                var rent = $forRent.prop('checked');
+                var problems = [];
+
+                if (!sale && !rent) {
+                    problems.push('Zgjidh të paktën një: në shitje ose me qira.');
+                }
+                if (sale && !$.trim($('#Property_SalePrice').val())) {
+                    problems.push('Shkruaj çmimin e shitjes.');
+                    $('#Property_SalePrice').addClass('is-invalid');
+                }
+                if (rent && !$.trim($('#Property_RentPrice').val())) {
+                    problems.push('Shkruaj çmimin e qirasë.');
+                    $('#Property_RentPrice').addClass('is-invalid');
+                }
+
+                if (problems.length) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    $listingError.text(problems.join(' ')).removeClass('d-none');
+                    document.getElementById('priceSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return false;
+                }
+
+                $('[data-listing].d-none input').val('');
+            });
+
+            var input = document.getElementById('NewImages');
+            var $drop = $('#photoDrop');
+            var pending = [];
+            var allowed = ['.jpg', '.jpeg', '.png', '.webp', '.avif'];
+            var maxSize = 10 * 1024 * 1024;
+
+            function syncInput() {
+                var dt = new DataTransfer();
+                pending.forEach(function (file) { dt.items.add(file); });
+                input.files = dt.files;
+            }
+
+            function renderPending() {
+                var $grid = $('#newPreview').empty();
+                pending.forEach(function (file, index) {
+                    var url = URL.createObjectURL(file);
+                    var $card = $('<div class="gd-photo-card">'
+                        + '<div class="gd-photo"><span class="gd-chip is-new">E re</span><img alt="" /></div>'
+                        + '<div class="gd-photo-actions"><span class="gd-photo-name"></span>'
+                        + '<button type="button" class="gd-icon-btn is-danger ms-auto" aria-label="Hiq foton" title="Hiq"><i class="bi bi-x-lg"></i></button>'
+                        + '</div></div>');
+                    $card.find('img').attr('src', url);
+                    $card.find('.gd-photo-name').text(file.name);
+                    $card.find('button').on('click', function () {
+                        URL.revokeObjectURL(url);
+                        pending.splice(index, 1);
+                        syncInput();
+                        renderPending();
+                    });
+                    $grid.append($card);
+                });
+                $('#newPreviewWrap').toggleClass('d-none', pending.length === 0);
+            }
+
+            function addFiles(files) {
+                Array.from(files).forEach(function (file) {
+                    var match = file.name.match(/\.[^.]+$/);
+                    var ext = match ? match[0].toLowerCase() : '';
+                    if (allowed.indexOf(ext) === -1) {
+                        toastr.warning(file.name + ': lejohen vetëm JPG, PNG, WEBP ose AVIF');
+                        return;
+                    }
+                    if (file.size === 0 || file.size > maxSize) {
+                        toastr.warning(file.name + ': fotoja duhet të jetë deri në 10 MB');
+                        return;
+                    }
+                    pending.push(file);
+                });
+                syncInput();
+                renderPending();
+            }
+
+            $(input).on('change', function () {
+                addFiles(Array.from(this.files));
+            });
+
+            $drop.on('dragenter dragover', function (e) {
+                e.preventDefault();
+                $drop.addClass('is-over');
+            });
+
+            $drop.on('dragleave drop', function (e) {
+                e.preventDefault();
+                $drop.removeClass('is-over');
+            });
+
+            $drop.on('drop', function (e) {
+                addFiles(e.originalEvent.dataTransfer.files);
+            });
+
+            $('.delete-image').on('click', function () {
+                var id = $(this).data('id');
+                confirmDelete('/Admin/Property/DeleteImage/' + id, function () {
+                    $('#image_' + id).remove();
+                    if (!$('#imageGrid').children().length) {
+                        $('#savedWrap').remove();
+                    }
+                });
+            });
+
+            $('.set-primary').on('click', function () {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: '/Admin/Property/SetPrimaryImage/' + id,
+                    type: 'POST',
+                    success: function (data) {
+                        $('#imageGrid .gd-photo-card').removeClass('is-primary');
+                        $('#imageGrid .primary-badge').addClass('d-none');
+                        $('#imageGrid .set-primary').removeClass('d-none');
+                        $('#image_' + id).addClass('is-primary');
+                        $('#image_' + id + ' .primary-badge').removeClass('d-none');
+                        $('#image_' + id + ' .set-primary').addClass('d-none');
+                        toastr.success(data.message);
+                    },
+                    error: function (xhr) {
+                        toastr.error(xhr.responseJSON?.message ?? 'Dicka shkoi keq');
+                    }
+                });
             });
         });
     </script>

@@ -8,6 +8,8 @@
         INeighbourhoodRepository Neighbourhood { get; }
         IContactInfoRepository ContactInfo { get; }
         IPropertyRepository Properties { get; }
+        IPropertyImageRepository PropertyImages { get; }
+        IPropertyAmenityRepository PropertyAmenities { get; }
         Task SaveAsync();
     }
 }

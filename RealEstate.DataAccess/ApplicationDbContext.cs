@@ -18,6 +18,8 @@ namespace RealEstate.DataAccess
         public DbSet<Neighbourhood> Neighbourhoods { get; set; }
         public DbSet<ContactInfo> ContactInfos { get; set; }
         public DbSet<Property> Properties { get; set; }
+        public DbSet<PropertyImage> PropertyImages { get; set; }
+        public DbSet<PropertyAmenity> PropertyAmenities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelbuilder)
         {
@@ -43,6 +45,8 @@ namespace RealEstate.DataAccess
                                            .OnDelete(DeleteBehavior.Restrict);
 
             modelbuilder.Entity<Property>().HasIndex(p => p.ReferenceCode).IsUnique();
+
+            modelbuilder.Entity<PropertyAmenity>().HasKey(pa => new { pa.PropertyId, pa.AmenityId });
         }
 
 
