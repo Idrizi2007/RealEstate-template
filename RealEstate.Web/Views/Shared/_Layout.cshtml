@@ -1,5 +1,9 @@
-﻿@{
-    var isAdmin = string.Equals(ViewContext.RouteData.Values["area"]?.ToString(), "Admin", StringComparison.OrdinalIgnoreCase);
+﻿@using RealEstate.Utility
+@{
+    var isAdmin = string.Equals(ViewContext.RouteData.Values["area"]?.ToString(), "Admin", StringComparison.OrdinalIgnoreCase)
+        || ViewData["AdminShell"] as bool? == true;
+    var isAdminUser = User.IsInRole(SD.AdminRole);
+    var page = ViewContext.RouteData.Values["page"]?.ToString();
     var controller = ViewContext.RouteData.Values["controller"]?.ToString();
     var action = ViewContext.RouteData.Values["action"]?.ToString();
     var isNewProperty = controller == "Property" && action == "Upsert" && ViewContext.RouteData.Values["id"] == null && string.IsNullOrEmpty(Context.Request.Query["id"]);
@@ -57,9 +61,17 @@
                     <a class="gd-side-link @(controller == "Amenity" ? "active" : null)" asp-area="Admin" asp-controller="Amenity" asp-action="Index"><i class="bi bi-ui-checks-grid"></i>Pajisjet</a>
                     <div class="gd-side-group">Cilësimet</div>
                     <a class="gd-side-link @(controller == "ContactInfo" ? "active" : null)" asp-area="Admin" asp-controller="ContactInfo" asp-action="Index"><i class="bi bi-telephone"></i>Kontakti</a>
+                    <a class="gd-side-link @(page == "/Account/Manage/ChangePassword" ? "active" : null)" asp-area="Identity" asp-page="/Account/Manage/ChangePassword"><i class="bi bi-key"></i>Fjalëkalimi</a>
                 </nav>
                 <div class="gd-side-foot">
                     <a class="gd-side-link" asp-area="Customer" asp-controller="Home" asp-action="Index" target="_blank" rel="noopener"><i class="bi bi-box-arrow-up-right"></i>Shiko faqen</a>
+                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Content("~/")" method="post">
+                        <button type="submit" class="gd-side-link"><i class="bi bi-box-arrow-right"></i>Dil</button>
+                    </form>
+                    @if (User.Identity?.IsAuthenticated ?? false)
+                    {
+                        <div class="gd-side-user" title="@User.Identity.Name">@User.Identity.Name</div>
+                    }
                 </div>
             </aside>
             <div class="gd-side-backdrop" data-gd-side></div>
@@ -89,6 +101,8 @@
                             <li class="nav-item"><a class="nav-link" href="/#qytetet">Qytetet</a></li>
                             <li class="nav-item"><a class="nav-link" href="/#te-fundit">Të fundit</a></li>
                             <li class="nav-item"><a class="nav-link" href="#kontakti">Kontakti</a></li>
+                            @if (isAdminUser)
+                            {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
                                 <ul class="dropdown-menu dropdown-menu-md-end rounded-0">
@@ -105,6 +119,7 @@
                                     <li><a class="dropdown-item" asp-area="Admin" asp-controller="ContactInfo" asp-action="Index">Kontakti</a></li>
                                 </ul>
                             </li>
+                            }
                         </ul>
                         <a class="btn-gd text-decoration-none" href="#kontakti"><i class="bi bi-whatsapp"></i>Na shkruani</a>
                     </div>
@@ -154,8 +169,11 @@
                     <span>&copy; 2026 Emri i Agjencisë</span>
                     <span>
                         <a asp-area="Customer" asp-controller="Home" asp-action="Privacy">Privatësia</a>
-                        <span class="mx-2">·</span>
-                        <a asp-area="Admin" asp-controller="Property" asp-action="Index">Paneli</a>
+                        @if (isAdminUser)
+                        {
+                            <span class="mx-2">·</span>
+                            <a asp-area="Admin" asp-controller="Property" asp-action="Index">Paneli</a>
+                        }
                     </span>
                 </div>
             </div>

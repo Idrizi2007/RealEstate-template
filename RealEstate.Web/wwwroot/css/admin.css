@@ -125,6 +125,30 @@ body.gd-admin {
     padding-top: var(--gd-s3);
 }
 
+.gd-side-foot form {
+    margin: 0;
+}
+
+button.gd-side-link {
+    width: 100%;
+    background: transparent;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 0;
+    text-align: left;
+}
+
+.gd-side-user {
+    margin-top: var(--gd-s3);
+    padding: 0 var(--gd-s3);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font: 0.75rem var(--gd-mono);
+    color: var(--gd-sea-soft);
+    opacity: 0.7;
+}
+
 .gd-side-backdrop {
     display: none;
 }

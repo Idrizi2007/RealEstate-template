@@ -1,0 +1,12 @@
+@page
+@model AccessDeniedModel
+@{
+    ViewData["Title"] = "Pa leje";
+}
+
+<div class="gd-eyebrow">Paneli</div>
+<h1>Nuk ke leje</h1>
+<p class="gd-auth-lead">Kjo faqe është vetëm për administratorin.</p>
+<form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Account/Login", new { area = "Identity" })" method="post">
+    <button type="submit" class="btn btn-primary gd-auth-submit">Hyr me një llogari tjetër<i class="bi bi-arrow-right"></i></button>
+</form>

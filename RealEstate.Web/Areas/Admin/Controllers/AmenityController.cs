@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RealEstate.DataAccess.Repository.IRepository;
 using RealEstate.Models;
 using RealEstate.Utility;
@@ -6,6 +7,7 @@ using RealEstate.Utility;
 namespace RealEstate.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.AdminRole)]
     public class AmenityController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

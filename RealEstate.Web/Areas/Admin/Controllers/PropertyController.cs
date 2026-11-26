@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RealEstate.DataAccess.Repository.IRepository;
 using RealEstate.Models;
+using RealEstate.Utility;
 using RealEstate.Web.ViewModels;
 using RealEstate.Web.Extensions;
 
@@ -8,6 +10,7 @@ using RealEstate.Web.Extensions;
 namespace RealEstate.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.AdminRole)]
 
     public class PropertyController : Controller
     {
@@ -93,7 +96,7 @@ namespace RealEstate.Web.Areas.Admin.Controllers
                     
 
                     int SortOrder = (await _unitOfWork.PropertyImages.GetAllAsync(u => u.PropertyId == propertyvm.Property.Id)).Count();
-                    var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".avif", ".webp "};
+                    var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".avif", ".webp"};
                     
                     foreach (var image in propertyvm.NewImages)
                     {

@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RealEstate.DataAccess.Repository.IRepository;
 using RealEstate.Models;
+using RealEstate.Utility;
 
 namespace RealEstate.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.AdminRole)]
     public class CityController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -45,6 +48,16 @@ namespace RealEstate.Web.Areas.Admin.Controllers
                 else
                 {
                     _unitOfWork.City.Update(city);
+                    if (!city.IsActive)
+                    {
+                        var properties = await _unitOfWork.Properties.GetAllAsync(u => u.CityId == city.Id && u.IsActive);
+                        foreach (var property in properties)
+                        {
+                            property.IsActive = false;
+                           
+                        }
+                        
+                    }
                 }
                 await _unitOfWork.SaveAsync();
                 TempData["success"] = isNew ? "Qyteti u shtua me sukses" : "Qyteti u perditesua me sukses";

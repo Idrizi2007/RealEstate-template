@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RealEstate.DataAccess.Repository.IRepository;
 using RealEstate.Models;
+using RealEstate.Utility;
 using RealEstate.Web.Extensions;
 using RealEstate.Web.ViewModels;
 
 namespace RealEstate.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.AdminRole)]
     public class NeighbourhoodController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

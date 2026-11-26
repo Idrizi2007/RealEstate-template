@@ -1,0 +1,21 @@
+@page
+@model LogoutModel
+@{
+    ViewData["Title"] = "Dil";
+}
+
+<div class="gd-eyebrow">Paneli</div>
+@if (User.Identity?.IsAuthenticated ?? false)
+{
+    <h1>Dil nga paneli?</h1>
+    <p class="gd-auth-lead">Do të duhet të hysh përsëri me fjalëkalim.</p>
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Content("~/")" method="post">
+        <button type="submit" class="btn btn-primary gd-auth-submit">Dil<i class="bi bi-box-arrow-right"></i></button>
+    </form>
+}
+else
+{
+    <h1>Dole nga paneli</h1>
+    <p class="gd-auth-lead">Je jashtë llogarisë.</p>
+    <a class="btn btn-primary gd-auth-submit" asp-area="Identity" asp-page="/Account/Login">Hyr përsëri<i class="bi bi-arrow-right"></i></a>
+}

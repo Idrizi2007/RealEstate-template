@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>@(ViewData["Title"] is string authTitle ? authTitle + " · " : "")Paneli</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Schibsted+Grotesk:wght@400..700&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/theme.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+</head>
+<body class="gd-admin gd-auth">
+    <div class="gd-auth-shell">
+        <aside class="gd-auth-aside">
+            <a class="gd-brand" asp-area="Customer" asp-controller="Home" asp-action="Index">Emri i Agjencisë</a>
+            <p class="gd-auth-quote">Çdo pronë,<br /><em>një nga një.</em></p>
+            <div class="gd-auth-meta">
+                <span>Paneli i administrimit</span>
+                <span>REF · ADMIN</span>
+            </div>
+        </aside>
+        <main class="gd-auth-main" role="main">
+            <div class="gd-auth-box">
+                <a class="gd-brand gd-auth-brand-sm" asp-area="Customer" asp-controller="Home" asp-action="Index">Emri i Agjencisë</a>
+                @RenderBody()
+                <a class="gd-auth-back" asp-area="Customer" asp-controller="Home" asp-action="Index"><i class="bi bi-arrow-left"></i>Kthehu te faqja</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
