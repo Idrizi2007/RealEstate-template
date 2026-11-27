@@ -449,13 +449,13 @@ main [id], footer[id] {
     margin-bottom: var(--gd-s7);
 }
 
-.gd-section-head h2 {
+.gd-section-head h1, .gd-section-head h2 {
     font-size: clamp(1.9rem, 3.2vw, 2.75rem);
     line-height: 1.1;
     margin: var(--gd-s2) 0 0;
 }
 
-.gd-section-head h2 em {
+.gd-section-head h1 em, .gd-section-head h2 em {
     color: var(--gd-sea);
 }
 
@@ -519,6 +519,42 @@ main [id], footer[id] {
 
 .gd-row .gd-price {
     margin-top: auto;
+}
+
+.gd-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--gd-s7) var(--gd-s5);
+}
+
+.gd-grid > .gd-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.gd-grid .gd-price {
+    margin-top: auto;
+}
+
+.gd-empty-state {
+    display: grid;
+    justify-items: center;
+    gap: var(--gd-s4);
+    padding: var(--gd-s8) var(--gd-s5);
+    background: var(--gd-white);
+    border: 1px solid var(--gd-line);
+    text-align: center;
+}
+
+.gd-empty-state > i {
+    font-size: 2rem;
+    color: var(--gd-muted);
+}
+
+.gd-empty-state p {
+    color: var(--gd-muted);
+    max-width: 46ch;
+    margin: 0;
 }
 
 .gd-band {
@@ -613,6 +649,10 @@ main [id], footer[id] {
     .gd-row > * {
         scroll-snap-align: start;
     }
+
+    .gd-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 767.98px) {
@@ -637,6 +677,10 @@ main [id], footer[id] {
 
 @media (max-width: 575.98px) {
     .gd-card-h {
+        grid-template-columns: 1fr;
+    }
+
+    .gd-grid {
         grid-template-columns: 1fr;
     }
 

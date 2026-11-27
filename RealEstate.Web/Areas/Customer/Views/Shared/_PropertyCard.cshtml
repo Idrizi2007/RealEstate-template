@@ -1,0 +1,76 @@
+@model Property
+@{
+    var money = new System.Globalization.NumberFormatInfo { NumberGroupSeparator = ".", NumberDecimalSeparator = "," };
+    string Euro(decimal value) => "€" + value.ToString("#,0", money);
+
+    var images = Model.Images ?? new List<PropertyImage>();
+    var photo = images.FirstOrDefault(i => i.IsPrimary) ?? images.OrderBy(i => i.SortOrder).FirstOrDefault();
+
+    var forSale = Model.SalePrice != null;
+    var forRent = Model.RentPrice != null;
+    var listing = forSale && forRent ? "Shitje · Qira" : forSale ? "Shitje" : forRent ? "Qira" : null;
+
+    var place = string.Join(" · ", new[] { Model.Neighbourhood?.Name, Model.City?.Name }.Where(s => !string.IsNullOrEmpty(s)));
+
+    var facts = new List<string>();
+    if (Model.AreaM2 != null) facts.Add(Model.AreaM2 + " m²");
+    if (Model.Bedrooms != null) facts.Add(Model.Bedrooms + (Model.Bedrooms == 1 ? " dhomë" : " dhoma"));
+    if (Model.Bathrooms != null) facts.Add(Model.Bathrooms + " banjo");
+    if (Model.Floor != null) facts.Add("Kati " + Model.Floor + (Model.TotalFloors != null ? "/" + Model.TotalFloors : ""));
+
+    string? mainPrice = null;
+    string? extraPrice = null;
+    if (forSale)
+    {
+        mainPrice = Euro(Model.SalePrice!.Value);
+        if (forRent) extraPrice = "ose " + Euro(Model.RentPrice!.Value) + " / muaj";
+    }
+    else if (forRent)
+    {
+        mainPrice = Euro(Model.RentPrice!.Value) + " / muaj";
+        if (Model.Deposit != null) extraPrice = "depozitë " + Euro(Model.Deposit.Value);
+    }
+}
+
+<a class="gd-card" href="#">
+    <span class="gd-photo">
+        @if (listing != null)
+        {
+            <span class="gd-chip">@listing</span>
+        }
+        <span class="gd-ref">@Model.ReferenceCode</span>
+        @if (photo != null)
+        {
+            <img src="@photo.ImageUrl" alt="@(photo.AltText ?? Model.Title)" loading="lazy" />
+        }
+        else
+        {
+            <span class="gd-photo-empty"><i class="bi bi-image"></i></span>
+        }
+    </span>
+    <span class="gd-eyebrow">@Model.PropertyType?.Name@(place.Length > 0 ? " · " + place : "")</span>
+    <h2 class="gd-card-title">@Model.Title</h2>
+    @if (facts.Count > 0)
+    {
+        <ul class="gd-facts">
+            @foreach (var fact in facts)
+            {
+                <li>@fact</li>
+            }
+        </ul>
+    }
+    <span class="gd-price">
+        @if (mainPrice != null)
+        {
+            <strong>@mainPrice</strong>
+            @if (extraPrice != null)
+            {
+                <span>@extraPrice</span>
+            }
+        }
+        else
+        {
+            <span>Çmimi me kërkesë</span>
+        }
+    </span>
+</a>

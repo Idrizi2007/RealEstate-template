@@ -1,0 +1,31 @@
+@model IEnumerable<Property>
+@{
+    ViewData["Title"] = "Pronat";
+    var count = Model.Count();
+}
+
+<div class="gd-section-head">
+    <div>
+        <div class="gd-eyebrow">Katalogu</div>
+        <h1>Të gjitha <em>pronat</em></h1>
+    </div>
+    <p class="gd-mono">@count @(count == 1 ? "pronë" : "prona")</p>
+</div>
+
+@if (count == 0)
+{
+    <div class="gd-empty-state">
+        <i class="bi bi-house"></i>
+        <p>Për momentin nuk ka prona në listë. Na shkruani dhe ju njoftojmë kur të dalë diçka.</p>
+        <a class="btn-gd text-decoration-none" href="#kontakti"><i class="bi bi-whatsapp"></i>Na shkruani</a>
+    </div>
+}
+else
+{
+    <div class="gd-grid">
+        @foreach (var property in Model)
+        {
+            <partial name="_PropertyCard" model="property" />
+        }
+    </div>
+}
